@@ -15,7 +15,7 @@
 -   [JWT](https://www.npmjs.com/package/jsonwebtoken)
 -   [Express](https://expressjs.com/en/guide/routing.html)
 
-## Run
+## Get Started
 
 -   Config environment variables
 
