@@ -26,8 +26,10 @@ type Product {
   created_at: DateTime!
   inventoryQuantity: Int!
   maxBusinessDaysToShip: Int!
+  orderedDate: String!
   productId: ID!
   productName: String!
+  shipDate: String!
   shipOnWeekends: Int!
   updated_at: DateTime!
 }

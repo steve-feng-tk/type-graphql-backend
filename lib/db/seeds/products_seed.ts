@@ -1,11 +1,14 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> } 
- */
-exports.seed = async function (knex) {
+import { Knex } from "knex";
+
+const randomDate = (start: Date, end: Date) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+}
+
+export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('products').del()
-  await knex('products').insert([
+
+  const products = [
     {
       "productId": 1,
       "productName": "fugiat exercitation adipisicing",
@@ -62,5 +65,11 @@ exports.seed = async function (knex) {
       "shipOnWeekends": false,
       "maxBusinessDaysToShip": 15
     }
-  ]);
+  ]
+
+  await knex('products').insert(products.map(product => ({
+    ...product,
+    created_at: randomDate(new Date('2022, 11, 1'), new Date()),
+    updated_at: new Date()
+  })));
 };
