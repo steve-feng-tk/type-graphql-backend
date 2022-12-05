@@ -8,6 +8,7 @@ import dataloaders from './db/dataloaders';
 import { authChecker } from './middlewares/authChecker';
 import repositories from './repositories';
 import { AuthResolver } from './resolvers/AuthResolver';
+import { ProductResolver } from './resolvers/ProductResolver';
 import { UploadResolver } from './resolvers/UploadResolver';
 import { UserResolver } from './resolvers/UserResolver';
 
@@ -23,7 +24,7 @@ const defaultContext = async ({ req, res }: any) => {
 
 export const createServer = async () => {
     const schema = await buildSchema({
-        resolvers: [AuthResolver, UserResolver, UploadResolver],
+        resolvers: [AuthResolver, UserResolver, UploadResolver, ProductResolver],
         emitSchemaFile: true,
         authChecker,
     });

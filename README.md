@@ -55,3 +55,17 @@ yarn dev
 ```
 
 -   Open graphQL playground[http://localhost:4444]
+
+## Notes
+
+-   create new migrate
+
+```
+yarn knex migrate:make create_products -x ts --knexfile ./lib/db/knexfile.tx
+```
+
+-   Create new DB seed
+
+```
+yarn knex seed:make products_seed --knexfile ./lib/db/knexfile.tx
+```

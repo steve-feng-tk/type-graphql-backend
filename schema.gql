@@ -22,8 +22,19 @@ type Mutation {
   login(input: LoginPayload!): LoginResponse!
 }
 
+type Product {
+  created_at: DateTime!
+  inventoryQuantity: Int!
+  maxBusinessDaysToShip: Int!
+  productId: ID!
+  productName: String!
+  shipOnWeekends: Int!
+  updated_at: DateTime!
+}
+
 type Query {
   me: User!
+  products: [Product!]!
   uploadUrl(input: SecureUploadInput!): SecureFile!
 }
 

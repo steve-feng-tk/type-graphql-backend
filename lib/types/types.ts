@@ -2,6 +2,7 @@ import DataLoader from 'dataloader';
 import { Knex } from 'knex';
 import User from '../models/user';
 import AuthRepository from '../repositories/AuthRepository';
+import ProductRepository from '../repositories/ProductRepository';
 import UserRepository from '../repositories/UserRepository';
 
 export type MyContext = {
@@ -15,6 +16,7 @@ export type MyContext = {
     repositories: {
         userRepository: UserRepository;
         authRepository: AuthRepository;
+        productRepository: ProductRepository;
     };
 };
 
