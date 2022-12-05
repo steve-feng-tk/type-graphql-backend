@@ -1,0 +1,114 @@
+service: admin-api
+frameworkVersion: '3'
+
+plugins:
+    - serverless-webpack
+    - serverless-offline
+    - serverless-prune-plugin
+
+package:
+    individually: true
+
+custom:
+    webpack:
+        includeModules:
+            forceInclude:
+                - mysql2
+            forceExclude:
+                - aws-sdk
+    serverless-offline:
+        httpPort: 4000
+        ignoreJWTSignature: true
+        noPrependStageInUrl: true
+    prune:
+        automatic: true
+        number: 3
+    config: ${file(./config.${sls:stage}.json)}
+
+provider:
+    name: aws
+    stage: ${opt:stage, 'local'}
+    vpc:
+        securityGroupIds:
+            - sg-ef54738a
+        subnetIds:
+            - subnet-0135ce97a01585e1b
+            - subnet-035d0e2e5a5e034e0
+    runtime: nodejs16.x
+    region: us-east-1
+    iam:
+        role:
+            statements:
+                - Effect: 'Allow'
+                  Action:
+                      - 'sns:*'
+                  Resource: '*'
+                - Effect: 'Allow'
+                  Action:
+                      - 's3:*'
+                  Resource:
+                      - 'arn:aws:s3:::snobswap2/*'
+    environment:
+        STAGE: ${sls:stage}
+        APP_URL: ${self:custom.config.app.url}
+        APP_KEY: ${self:custom.config.app.key}
+        AWS_ACCOUNT_ID: ${self:custom.config.aws.id}
+        JWT_SECRET_KEY: ${self:custom.config.jwt_secret}
+        MYSQL_HOST: ${self:custom.config.mysql.host}
+        MYSQL_USERNAME: ${self:custom.config.mysql.username}
+        MYSQL_PASSWORD: ${self:custom.config.mysql.password}
+        MYSQL_DATABASE: ${self:custom.config.mysql.database}
+        MYSQL_PORT: ${self:custom.config.mysql.port}
+        REDIS_HOST: ${self:custom.config.redis.host}
+        REDIS_PORT: ${self:custom.config.redis.port}
+        REDIS_DATABASE: ${self:custom.config.redis.database.default}
+        REDIS_CMS_DATABASE: ${self:custom.config.redis.database.cms}
+        POSTMARK_KEY: ${self:custom.config.postmark.key}
+        EASYPOST_KEY: ${self:custom.config.easypost.key}
+        PLAID_CLIENT_ID: ${self:custom.config.plaid.client_id}
+        PLAID_SECRET: ${self:custom.config.plaid.secret}
+        BACKEND_API_ENDPOINT: ${self:custom.config.backend_api.endpoint}
+        STRIPE_PRIVATE_KEY: ${self:custom.config.stripe.key}
+        STRIPE_PRIVATE_KEY_EU: ${self:custom.config.stripe.key_eu}
+        RECAPTCHA_SECRET: ${self:custom.config.recaptcha.secret}
+        SLACK_WEBHOOK: ${self:custom.config.slack.webhook}
+
+functions:
+    graphql:
+        handler: lib/handlers/graphql.handler
+        timeout: 30
+        events:
+            - http:
+                  path: /graphql
+                  method: get
+                  cors:
+                      origins:
+                          - https://admin.leprix.com
+                          - https://admin.leprix.test
+                          - https://studio.apollographql.com
+                      headers:
+                          - Content-Type
+                          - Authorization
+                          - X-Amz-Date
+                          - X-Api-Key
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Locale-Code
+                      allowCredentials: true
+            - http:
+                  path: /graphql
+                  method: post
+                  cors:
+                      origins:
+                          - https://admin.leprix.com
+                          - https://admin.leprix.test
+                          - https://studio.apollographql.com
+                      headers:
+                          - Content-Type
+                          - Authorization
+                          - X-Amz-Date
+                          - X-Api-Key
+                          - X-Amz-Security-Token
+                          - X-Amz-User-Agent
+                          - X-Locale-Code
+                      allowCredentials: true
